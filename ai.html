@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Joke Bot</title>
+
+    <style>
+        body {
+            background-color: azure;
+            font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+            margin: 0;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border: 5px solid lightseagreen;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        #chat-window {
+            height: 350px;
+            overflow-y: auto;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .message {
+            padding: 12px 18px;
+            border-radius: 15px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .bot {
+            background-color: lightseagreen;
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .user {
+            background-color: #eee;
+            color: #333;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            min-height: 45px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #15a093;
+        }
+
+        .nav-link {
+            margin-top: 30px;
+            color: lightseagreen;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>The Comedian Bot</h1>
+
+    <div class="chat-container">
+        <div id="chat-window">
+            <div class="message bot">Hi Breanna! Ready for a laugh? Click the button below!</div>
+        </div>
+        
+        <div class="controls">
+            <button id="joke-btn" onclick="startJoke()">Tell me a joke!</button>
+            <button id="punchline-btn" onclick="showPunchline()" style="display:none; background-color: orange;">What?</button>
+            <button onclick="clearChat()" style="background-color: #ccc; color: #333;">Clear</button>
+        </div>
+    </div>
+
+    <a href="fromscratch.html" class="nav-link">← Back to Cookbook</a>
+
+    <script>
+        const jokes = [
+            { setup: "Why did the tomato turn red?", punchline: "Because it saw the salad dressing!" },
+            { setup: "What do you call a fake noodle?", punchline: "An Impasta!" },
+            { setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything!" },
+            { setup: "What did the ocean say to the beach?", punchline: "Nothing, it just waved." },
+            { setup: "Why did the baker go to culinary school?", punchline: "He kneaded the dough!" }
+        ];
+
+        let currentPunchline = ""; 
+        const chatWindow = document.getElementById('chat-window');
+        const jokeBtn = document.getElementById('joke-btn');
+        const punchlineBtn = document.getElementById('punchline-btn');
+
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message', sender);
+            msgDiv.innerText = text;
+            chatWindow.appendChild(msgDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function startJoke() {
+            addMessage("Tell me a joke!", "user");
+            jokeBtn.style.display = "none"; 
+
+            setTimeout(() => {
+                const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+                currentPunchline = randomJoke.punchline; 
+                addMessage(randomJoke.setup, "bot");
+                
+                setTimeout(() => {
+                    punchlineBtn.style.display = "inline-block";
+                }, 500);
+            }, 600);
+        }
+
+        function showPunchline() {
+            addMessage("What?", "user");
+            punchlineBtn.style.display = "none"; 
+
+            setTimeout(() => {
+                addMessage(currentPunchline + " 😂", "bot");
+                
+                setTimeout(() => {
+                    jokeBtn.style.display = "inline-block";
+                    jokeBtn.innerText = "Tell me another!";
+                }, 1000);
+            }, 600);
+        }
+
+        function clearChat() {
+            chatWindow.innerHTML = '<div class="message bot">Let\'s start over! Ready for a joke?</div>';
+            jokeBtn.style.display = "inline-block";
+            jokeBtn.innerText = "Tell me a joke!";
+            punchlineBtn.style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
